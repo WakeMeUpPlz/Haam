@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
@@ -19,6 +20,7 @@ import android.widget.TimePicker;
 import android.widget.ToggleButton;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.haam.R;
@@ -29,6 +31,7 @@ import java.util.List;
 public class AlarmAdapter extends RecyclerView.Adapter<AlarmAdapter.AlarmViewHolder> {
     private List<Alarm> alarmList;
     private Context context;
+    private AlertDialog alertDialog;  // 클래스의 멤버 변수로 AlertDialog 선언
 
     public AlarmAdapter(List<Alarm> alarmList, Context context) {
         this.alarmList = alarmList;
@@ -55,6 +58,8 @@ public class AlarmAdapter extends RecyclerView.Adapter<AlarmAdapter.AlarmViewHol
                 showPopup(alarm.getTime(), position);
             }
         });
+
+
     }
     // 알람음 목록 가져오기
     private ArrayAdapter<String> getAlarmSoundsAdapter() {
@@ -77,10 +82,25 @@ public class AlarmAdapter extends RecyclerView.Adapter<AlarmAdapter.AlarmViewHol
 
     private void showPopup(String alarmTime, int position) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
-
         // 레이아웃 리소스를 팝업에 설정
         View view = LayoutInflater.from(context).inflate(R.layout.activity_add_alarm_popup, null);
         builder.setView(view);
+
+
+        Button deleteAlarmBtn = view.findViewById(R.id.deleteAlarmBtn);
+        deleteAlarmBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // 현재 위치의 알람을 삭제
+                alarmList.remove(position);
+                // 다이얼로그 닫기
+                alertDialog.dismiss();
+                // 리사이클러뷰 갱신
+                notifyItemRemoved(position);
+            }
+        });
+
+
         TimePicker timePicker = view.findViewById(R.id.alarmTimeSelector2);
 
         String[] Time = alarmTime.split(":");
@@ -140,12 +160,12 @@ public class AlarmAdapter extends RecyclerView.Adapter<AlarmAdapter.AlarmViewHol
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 // 취소 버튼을 눌렀을 때 수행할 동작
-                dialog.dismiss(); // 팝업을 닫습니다.
+                alertDialog.dismiss(); // 팝업을 닫습니다.
             }
         });
 
-        AlertDialog dialog = builder.create();
-        dialog.show();
+        alertDialog = builder.create();  // AlertDialog 객체 생성
+        alertDialog.show();
     }
 
     @Override

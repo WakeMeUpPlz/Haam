@@ -194,6 +194,16 @@
                     android:layout_weight="1" />
             </LinearLayout>
 
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/deleteAlarmBtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="20dp"
+                android:background="@drawable/btn1"
+                android:fontFamily="@font/nanum_godic_bold"
+                android:text="삭제하기" />
+
         </LinearLayout>
     </ScrollView>
 
