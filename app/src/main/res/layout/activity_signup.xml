@@ -1,0 +1,87 @@
+<!-- res/layout/activity_signup.xml -->
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="16dp"
+    android:paddingTop="16dp"
+    android:paddingRight="16dp"
+    android:paddingBottom="16dp"
+    tools:context=".auth.SignupActivity">
+
+    <EditText
+        android:id="@+id/editTextUsernameSignup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="아이디"
+        android:inputType="text"
+        android:padding="12dp"/>
+
+    <Button
+        android:id="@+id/buttonCheckUsername"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/editTextUsernameSignup"
+        android:layout_marginTop="8dp"
+        android:text="중복 확인"/>
+
+    <EditText
+        android:id="@+id/editTextPasswordSignup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/buttonCheckUsername"
+        android:layout_marginTop="8dp"
+        android:hint="비밀번호"
+        android:inputType="textPassword"
+        android:padding="12dp"/>
+
+    <EditText
+        android:id="@+id/editTextConfirmPassword"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/editTextPasswordSignup"
+        android:layout_marginTop="8dp"
+        android:hint="비밀번호 확인"
+        android:inputType="textPassword"
+        android:padding="12dp"/>
+
+    <TextView
+        android:id="@+id/textViewPasswordMismatch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/editTextConfirmPassword"
+        android:layout_marginTop="4dp"
+        android:text="일치하지 않습니다."
+        android:textColor="@android:color/holo_red_dark"
+        android:visibility="gone"/>
+
+    <EditText
+        android:id="@+id/editTextNameSignup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/editTextConfirmPassword"
+        android:layout_marginTop="8dp"
+        android:hint="이름"
+        android:inputType="text"
+        android:padding="12dp"/>
+
+    <EditText
+        android:id="@+id/editTextPhoneNumberSignup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/editTextNameSignup"
+        android:layout_marginTop="8dp"
+        android:hint="전화번호"
+        android:inputType="phone"
+        android:padding="12dp"/>
+
+    <Button
+        android:id="@+id/buttonSignup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/editTextPhoneNumberSignup"
+        android:layout_marginTop="3dp"
+        android:text="회원가입"/>
+
+</RelativeLayout>
