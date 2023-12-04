@@ -1,0 +1,93 @@
+package com.haam.game;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import android.graphics.Color;
+import android.os.Bundle;
+import android.widget.TextView;
+
+import com.andrognito.patternlockview.PatternLockView;
+import com.andrognito.patternlockview.listener.PatternLockViewListener;
+import com.andrognito.patternlockview.utils.PatternLockUtils;
+import com.haam.R;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+public class PatternGameActivity extends AppCompatActivity {
+    PatternLockView patternLockView;
+    TextView passwordTextView;
+    String restorePassword;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_pattern_game);
+        passwordTextView = findViewById(R.id.password_text_view);
+        patternLockView = findViewById(R.id.pattern_lock_view);
+
+        restorePassword = generateRandom4DigitNumber();
+        passwordTextView.setText(restorePassword);
+        patternLockView.addPatternLockListener(new PatternLockViewListener() {
+            @Override
+            public void onStarted() {
+            }
+
+            @Override
+            public void onProgress(List<PatternLockView.Dot> progressPattern) {
+
+            }
+
+            @Override
+            public void onComplete(List<PatternLockView.Dot> pattern) {
+                String password = PatternLockUtils.patternToString(patternLockView, pattern);
+                if (!restorePassword.equals("")) {
+                    //2-1 입력과 저장된 패스워드가 같다면
+                    if (password.equals(restorePassword)) {
+                        //패턴 색상 변경
+                        patternLockView.setCorrectStateColor(Color.parseColor("#0000FF"));
+                        //파랑
+                    }
+                    //2-2 입력과 저장된 패스워드가 다르다면
+                    else {
+                        //패턴 색상 변경
+                        patternLockView.setCorrectStateColor(Color.parseColor("#FF0000"));
+                        //빨강
+                    }
+                }
+            }
+
+            @Override
+            public void onCleared() {
+
+            }
+        });
+    }
+    private static boolean containsExcludedNumbers(ArrayList<Integer> digits, Integer... excludedNumbers) {
+        for(Integer excludedNumber : excludedNumbers) {
+            if (digits.contains(excludedNumber))
+                return true;
+        }
+        return false;
+    }
+    public String generateRandom4DigitNumber() {
+        ArrayList<Integer> digits = new ArrayList<>();
+        // 0부터 9사이의 숫자
+        for (int i = 0; i < 9; i++) {
+            digits.add(i);
+        }
+        Collections.shuffle(digits);
+        // 숫자 순서 섞기
+        /*do {
+            Collections.shuffle(digits);
+            // 해당 숫자 제외하기
+        } while (containsExcludedNumbers(digits, Integer.parseInt("02"),Integer.parseInt("06"),Integer.parseInt("08"),17,20,26,28,35,53,60,62,68,71,80,82,86));*/
+        StringBuilder randomNum = new StringBuilder();
+        // 4자리 비밀번호
+        for (int i = 0; i < 4; i++) {
+            randomNum.append(digits.get(i));
+        }
+        return randomNum.toString();
+    }
+}
