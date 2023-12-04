@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/alarm_item_top_layout"
+    android:orientation="vertical"
+    android:padding="20dp">
+
+    <TimePicker
+        android:id="@+id/alarmTimeSelector2"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:background="@color/maingray"
+        android:timePickerMode="spinner" />
+
+
+    <!-- 알람 이름 입력 -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/maingray"
+            android:orientation="vertical"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp">
+
+            <Switch
+                android:id="@+id/switchRepeat"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:fontFamily="@font/nanum_gothic"
+                android:paddingTop="20dp"
+                android:paddingBottom="20dp"
+                android:text="반복 설정"
+                android:textSize="16sp" />
+
+            <LinearLayout
+                android:id="@+id/layoutRepeatDays"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:visibility="gone">
+
+                <!-- 각 요일 체크박스 -->
+                <CheckBox
+                    android:id="@+id/checkBoxMonday"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/nanum_gothic"
+                    android:text="월" />
+
+                <CheckBox
+                    android:id="@+id/checkBoxTuesday"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/nanum_gothic"
+                    android:text="화" />
+
+                <CheckBox
+                    android:id="@+id/checkBoxWednesday"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/nanum_gothic"
+                    android:text="수" />
+
+                <CheckBox
+                    android:id="@+id/checkBoxThursday"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/nanum_gothic"
+                    android:text="목" />
+
+                <CheckBox
+                    android:id="@+id/checkBoxFriday"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/nanum_gothic"
+                    android:text="금" />
+
+                <CheckBox
+                    android:id="@+id/checkBoxSaturday"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/nanum_gothic"
+                    android:text="토" />
+
+                <CheckBox
+                    android:id="@+id/checkBoxSunday"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/nanum_gothic"
+                    android:text="일" />
+                <!-- 나머지 요일 체크박스들 -->
+
+            </LinearLayout>
+
+            <CheckBox
+                android:id="@+id/checkBoxHolidayOff"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:fontFamily="@font/nanum_gothic"
+                android:text="공휴일에는 끄기 설정" />
+
+            <TextView
+                android:id="@+id/textView4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:text="대체 공휴일 및 임시 공휴일 제외"
+                android:textColor="@color/maingreen" />
+
+            <EditText
+                android:id="@+id/editTextAlarmName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/nanum_gothic"
+                android:hint="알람 이름"
+                android:paddingTop="20dp"
+                android:paddingBottom="20dp"
+                android:textSize="14sp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingTop="20dp"
+                android:paddingBottom="20dp">
+
+                <TextView
+                    android:id="@+id/textView3"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/nanum_gothic"
+                    android:text="알람음"
+                    android:textColor="#000000"
+                    android:textSize="16sp" />
+
+                <Spinner
+                    android:id="@+id/spinnerAlarmSound"
+                    android:layout_width="0dp"
+                    android:layout_height="30dp"
+                    android:layout_weight="3">
+                    <!-- 알람음 목록 -->
+                </Spinner>
+
+                <Switch
+                    android:id="@+id/switchSilent"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:paddingTop="20dp"
+                android:paddingBottom="20dp">
+
+                <TextView
+                    android:id="@+id/textView6"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/nanum_gothic"
+                    android:text="헬퍼등록"
+                    android:textColor="#000000"
+                    android:textSize="16sp" />
+
+                <Spinner
+                    android:id="@+id/spinnerHelperNumber"
+                    android:layout_width="0dp"
+                    android:layout_height="30dp"
+                    android:layout_weight="3">
+                </Spinner>
+
+                <Switch
+                    android:id="@+id/switchHelper"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+            </LinearLayout>
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/deleteAlarmBtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="20dp"
+                android:background="@drawable/btn1"
+                android:fontFamily="@font/nanum_godic_bold"
+                android:text="삭제하기" />
+
+        </LinearLayout>
+    </ScrollView>
+
+    <!-- 알람음 선택 -->
+
+    <!-- 반복 설정 -->
+
+    <!-- 요일 선택 (반복이 설정된 경우에만 표시) -->
+
+    <!-- 공휴일에는 끄기 설정 -->
+
+    <!-- 반복 설정 -->
+
+    <!-- 요일 선택 (반복이 설정된 경우에만 표시) -->
+
+</LinearLayout>

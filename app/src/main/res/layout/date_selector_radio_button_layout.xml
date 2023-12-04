@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/radioButtonLayout"
+    android:layout_width="match_parent"
+    android:layout_height="40dp"
+    android:maxHeight="50dp"
+    android:layout_marginRight="20dp"
+    android:layout_marginLeft="20dp"
+    android:background="@drawable/add_alarm_detailbutton_layout"
+    android:orientation="horizontal">
+
+    <TextView
+        android:id="@+id/date"
+        android:layout_marginStart="20sp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintHorizontal_weight="9"
+        android:text="요일"
+        android:textColor="@android:color/black"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <CheckBox
+        android:id="@+id/isChecked"
+        app:layout_constraintHorizontal_weight="1"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginRight="30dp"
+        android:button="@android:color/transparent"
+        android:background="@drawable/custom_checkbox_layout"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
