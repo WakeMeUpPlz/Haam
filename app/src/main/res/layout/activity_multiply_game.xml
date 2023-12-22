@@ -6,37 +6,37 @@
     android:layout_height="match_parent"
     android:gravity="center"
     android:orientation="vertical"
+    android:paddingLeft="30dp"
+    android:paddingRight="30dp"
     tools:context=".game.MultiplyGameActivity">
     <TextView
         android:id="@+id/question"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="100dp"
-        android:text="Hello World!"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:textColor="@color/maingreen"
+        android:textSize="16sp"
+        android:paddingTop="20dp"
+        android:paddingBottom="20dp"
+        android:text="Hello World!" />
 
     <EditText
         android:id="@+id/answer"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
+        android:paddingTop="20dp"
+        android:paddingBottom="20dp"
         android:inputType="textPersonName"
-        android:hint="답을 작성하세요."
-        app:layout_constraintBottom_toBottomOf="@+id/question"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/question"
-        app:layout_constraintTop_toTopOf="@+id/question" />
+        android:importantForAutofill="no"
+        android:hint="답을 작성하세요." />
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btn_check"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Button"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/question" />
+        android:text="알람 해제하기"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
+        android:background="@drawable/btn1"
+        android:fontFamily="@font/nanum_godic_bold"/>
 </LinearLayout>
