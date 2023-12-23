@@ -45,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
 
         recyclerView = findViewById(R.id.rvAlarmList);
         alarmList = new ArrayList<>();
-        alarmList.add(new Alarm(1, "01:14", "Wake up", "default", "Helper 1", "1000111", true, false, "AM"));
+        alarmList.add(new Alarm(1, "01:40", "Wake up", "default", "Helper 1", "1000111", true, false, "AM"));
         alarmList.add(new Alarm(2, "00:58", "Lunch time", "default", "Helper 2", "1111111", false, false, "AM"));
         alarmList.add(new Alarm(3, "08:30", "Exercise", "default", "Helper 3", "1110000", true, false, "AM"));
 
@@ -80,19 +80,9 @@ public class MainActivity extends AppCompatActivity {
         AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
 
         for (Alarm alarm : alarmList) {
-            boolean[] week={charToBoolean(alarm.getDates().charAt(6)),
-                    charToBoolean(alarm.getDates().charAt(0)),
-                    charToBoolean(alarm.getDates().charAt(1)),
-                    charToBoolean(alarm.getDates().charAt(2)),
-                    charToBoolean(alarm.getDates().charAt(3)),
-                    charToBoolean(alarm.getDates().charAt(4)),
-                    charToBoolean(alarm.getDates().charAt(5))
-            };
-
             Intent intent = new Intent("com.haam.alarm.ACTION_ALARM");
             // 다른 구성 요소에서도 브로드캐스트를 수신할 수 있도록 패키지 이름을 추가
             intent.setPackage(getPackageName());
-            intent.putExtra("ALARM_TIME", alarm.getTime());
             Log.d("onReceive전송:",alarm.getTime());
             PendingIntent pendingIntent = PendingIntent.getBroadcast(this, alarm.getAlarmId(), intent, PendingIntent.FLAG_ONE_SHOT);
 
