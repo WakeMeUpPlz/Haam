@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
+import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -20,17 +21,19 @@ import java.util.Random;
 
 public class PopRingActivity extends AppCompatActivity {
     Button goPatternBtn;
-
+    TextView viewTime;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pop_ring);
         goPatternBtn = findViewById(R.id.goPatternBtn);
-        int alarmId = getIntent().getIntExtra("ALARM_ID", -1);
-        if (alarmId!=-1)
-            Log.d("PopRingActivity", "Received Alarm ID: " + alarmId);
 
         playAlarmSound();
+        String alarmTime = getIntent().getStringExtra("ALARM_TIME");
+        viewTime = findViewById(R.id.viewTime);
+        viewTime.setText(alarmTime);
+
+
         goPatternBtn.setOnClickListener(view -> {
             Class<?>[] activities = {MultiplyGameActivity.class, PatternGameActivity.class, TraceGameActivity.class};
             Random random = new Random();

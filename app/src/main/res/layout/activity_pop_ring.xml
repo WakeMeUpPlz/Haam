@@ -13,10 +13,11 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="50dp"
+        android:fontFamily="@font/nanum_godic_bold"
         android:text="시간"
+        android:textAlignment="center"
         android:textColor="@color/black"
-        android:textSize="80sp"
-        android:textAlignment="center" />
+        android:textSize="80sp" />
 
 
     <ImageView

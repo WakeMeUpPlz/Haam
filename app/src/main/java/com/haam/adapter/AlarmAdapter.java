@@ -96,58 +96,74 @@ public class AlarmAdapter extends RecyclerView.Adapter<AlarmAdapter.AlarmViewHol
 
         return adapter;
     }
-    public void initPopup(){
+    //알람 추가를 위한 팝업
+    public void initPopup() {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         // 레이아웃 리소스를 팝업에 설정
         View view = LayoutInflater.from(context).inflate(R.layout.activity_add_alarm_popup, null);
         builder.setView(view);
 
+        Button deleteAlarmBtn= view.findViewById(R.id.deleteAlarmBtn);
+        deleteAlarmBtn.setVisibility(View.GONE);
         TimePicker timePicker = view.findViewById(R.id.alarmTimeSelector2);
-        EditText editTextAlarmName=view.findViewById(R.id.editTextAlarmName);
+        EditText editTextAlarmName = view.findViewById(R.id.editTextAlarmName);
 
-
-        // 스피너 초기화 및 알람음 목록 가져오기
-        Spinner spinnerAlarmSound = view.findViewById(R.id.spinnerAlarmSound);
-        ArrayAdapter<String> alarmSoundsAdapter = getAlarmSoundsAdapter();
-        spinnerAlarmSound.setAdapter(alarmSoundsAdapter);
+        // 체크박스 초기화
+        CheckBox checkBoxMonday = view.findViewById(R.id.checkBoxMonday);
+        CheckBox checkBoxTuesday = view.findViewById(R.id.checkBoxTuesday);
+        CheckBox checkBoxWednesday = view.findViewById(R.id.checkBoxWednesday);
+        CheckBox checkBoxThursday = view.findViewById(R.id.checkBoxThursday);
+        CheckBox checkBoxFriday = view.findViewById(R.id.checkBoxFriday);
+        CheckBox checkBoxSaturday = view.findViewById(R.id.checkBoxSaturday);
+        CheckBox checkBoxSunday = view.findViewById(R.id.checkBoxSunday);
 
         // 팝업의 확인 버튼 등을 설정
         builder.setPositiveButton("저장", new DialogInterface.OnClickListener() {
             int hour, minute;
             String dorN;
+
             @Override
             public void onClick(DialogInterface dialog, int which) {
-
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     hour = timePicker.getHour();
                     minute = timePicker.getMinute();
                 } else {
-                    // 안드로이드 M 미만에서는 deprecated된 getHour()와 getMinute() 대신
-                    // getCurrentHour()와 getCurrentMinute()를 사용합니다.
                     hour = timePicker.getCurrentHour();
                     minute = timePicker.getCurrentMinute();
                 }
-                if (hour>=12){
-                    dorN="PM";
-                }else{
-                    dorN="AM";
+                if (hour >= 12) {
+                    dorN = "PM";
+                } else {
+                    dorN = "AM";
                 }
 
-                int alarmId= alarmList.size()+1;
-                String time = hour+":"+minute;
-                String title= String.valueOf(editTextAlarmName.getText());
+                int alarmId = alarmList.size() + 1;
+                String time = String.format("%02d:%02d", hour, minute);
+                String title = String.valueOf(editTextAlarmName.getText());
 
-//
-//                Alarm alarm = new Alarm();
-//                    alarmList.add()
+                // 요일 정보 가져오기
+                boolean[] week = {
+                        checkBoxMonday.isChecked(),
+                        checkBoxTuesday.isChecked(),
+                        checkBoxWednesday.isChecked(),
+                        checkBoxThursday.isChecked(),
+                        checkBoxFriday.isChecked(),
+                        checkBoxSaturday.isChecked(),
+                        checkBoxSunday.isChecked()
+                };
 
+                // 새로운 알람 객체 생성
+                Alarm newAlarm = new Alarm(alarmId, time, title, "default", "Helper", booleanArrayToString(week), true, false, dorN);
+
+                // 알람을 추가하고 리사이클러뷰 업데이트
+                alarmList.add(newAlarm);
+                notifyDataSetChanged(); // 리사이클러뷰 갱신
             }
         });
 
         builder.setNegativeButton("취소", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                // 취소 버튼을 눌렀을 때 수행할 동작
                 alertDialog.dismiss(); // 팝업을 닫습니다.
             }
         });
@@ -155,6 +171,16 @@ public class AlarmAdapter extends RecyclerView.Adapter<AlarmAdapter.AlarmViewHol
         alertDialog = builder.create();  // AlertDialog 객체 생성
         alertDialog.show();
     }
+
+    // boolean 배열을 문자열로 변환
+    private String booleanArrayToString(boolean[] week) {
+        StringBuilder result = new StringBuilder();
+        for (boolean b : week) {
+            result.append(b ? '1' : '0');
+        }
+        return result.toString();
+    }
+
     //알람 수정을 위한 팝업
     public void showPopup(Alarm alarm,int position) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
