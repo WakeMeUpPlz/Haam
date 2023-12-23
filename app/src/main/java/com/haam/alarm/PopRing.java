@@ -25,12 +25,16 @@ public class PopRing extends BroadcastReceiver {
         // 형식에 맞게 시간을 문자열로 변환
         String currentTime = dateFormat.format(currentDate);
 
+        // Intent에서 helperPhoneNumber를 추출
+        String helperPhoneNumber = intent.getStringExtra("HELPER_PHONE_NUMBER");
         // 출력
         System.out.println("현재 시간: " + currentTime);
         Toast.makeText(context, "알람이 울렸습니다!", Toast.LENGTH_SHORT).show();
         // 예를 들어, PopRing 액티비티를 시작하는 코드를 여기에 추가할 수 있습니다.
         Intent popRingIntent = new Intent(context, PopRingActivity.class);
         popRingIntent.putExtra("ALARM_TIME",currentTime);
+        popRingIntent.putExtra("HELPER_PHONE_NUMBER", helperPhoneNumber);
+
         popRingIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(popRingIntent);
     }
