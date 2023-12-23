@@ -29,22 +29,21 @@
             android:paddingRight="10dp">
 
             <Switch
-                android:id="@+id/switchRepeat"
+                android:id="@+id/switchAlarmActivity"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:fontFamily="@font/nanum_gothic"
                 android:paddingTop="20dp"
                 android:paddingBottom="20dp"
-                android:text="반복 설정"
+                android:text="알람 활성화"
                 android:textSize="16sp" />
 
             <LinearLayout
-                android:id="@+id/layoutRepeatDays"
+                android:id="@+id/layoutSetDays"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:visibility="gone">
+                android:orientation="horizontal">
 
                 <!-- 각 요일 체크박스 -->
                 <CheckBox
@@ -105,22 +104,6 @@
 
             </LinearLayout>
 
-            <CheckBox
-                android:id="@+id/checkBoxHolidayOff"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:fontFamily="@font/nanum_gothic"
-                android:text="공휴일에는 끄기 설정" />
-
-            <TextView
-                android:id="@+id/textView4"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
-                android:text="대체 공휴일 및 임시 공휴일 제외"
-                android:textColor="@color/maingreen" />
-
             <EditText
                 android:id="@+id/editTextAlarmName"
                 android:layout_width="match_parent"
@@ -156,11 +139,6 @@
                     <!-- 알람음 목록 -->
                 </Spinner>
 
-                <Switch
-                    android:id="@+id/switchSilent"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1" />
             </LinearLayout>
 
             <LinearLayout

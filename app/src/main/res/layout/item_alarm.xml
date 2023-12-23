@@ -83,7 +83,7 @@
                 android:layout_marginLeft="20dp"
                 android:paddingLeft="15dp"
                 android:text="월"
-                android:textColor="@color/white"
+                android:textColor="#FFFFFF"
                 android:textStyle="bold" />
 
             <TextView
