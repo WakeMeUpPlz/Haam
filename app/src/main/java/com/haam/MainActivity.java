@@ -1,6 +1,9 @@
 package com.haam;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -9,6 +12,7 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.util.Log;
@@ -35,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
     public static List<Alarm> alarmList;
     private TextView tvAlarmNo;
     private Button addAlarmBtn;
+    private static final int MY_PERMISSIONS_REQUEST_SEND_SMS = 1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,12 +47,16 @@ public class MainActivity extends AppCompatActivity {
         tvAlarmNo=findViewById(R.id.tvAlarmNo);
         addAlarmBtn=findViewById(R.id.addAlarmBtn);
 
+        // SMS 권한 확인 및 요청
+        if (ContextCompat.checkSelfPermission(this, "android.permission.SEND_SMS") != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{"android.permission.SEND_SMS"}, MY_PERMISSIONS_REQUEST_SEND_SMS);
+        }
 
         recyclerView = findViewById(R.id.rvAlarmList);
         alarmList = new ArrayList<>();
-        alarmList.add(new Alarm(1, "01:40", "Wake up", "default", "Helper 1", "1000111", true, false, "AM"));
-        alarmList.add(new Alarm(2, "00:58", "Lunch time", "default", "Helper 2", "1111111", false, false, "AM"));
-        alarmList.add(new Alarm(3, "08:30", "Exercise", "default", "Helper 3", "1110000", true, false, "AM"));
+        alarmList.add(new Alarm(1, "03:18", "Wake up", "default", "01012345678", "1000111", true, false, "AM"));
+        alarmList.add(new Alarm(2, "00:58", "Lunch time", "default", "01011112222", "1111111", false, false, "AM"));
+        alarmList.add(new Alarm(3, "08:30", "Exercise", "default", "01033334444", "1110000", true, false, "AM"));
 
         if(alarmList.size()!=0){
             recyclerView.setVisibility(View.VISIBLE);
@@ -70,11 +79,21 @@ public class MainActivity extends AppCompatActivity {
         });
         // 알람 설정 및 울리도록 하는 코드
         setupAlarms();
-    }// 알람 설정 메서드
-
-    private boolean charToBoolean(char c) {
-        return c == '1';
     }
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == MY_PERMISSIONS_REQUEST_SEND_SMS) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // 사용자가 권한을 수락한 경우
+            } else {
+                // 사용자가 권한을 거부한 경우 메시지 표시
+                Toast.makeText(this, "SMS 전송 권한이 거부되었습니다.", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    // 알람 설정 메서드
     private void setupAlarms() {
         Toast.makeText(this, "setupAlarm", Toast.LENGTH_SHORT).show();
         AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
@@ -84,6 +103,10 @@ public class MainActivity extends AppCompatActivity {
             // 다른 구성 요소에서도 브로드캐스트를 수신할 수 있도록 패키지 이름을 추가
             intent.setPackage(getPackageName());
             Log.d("onReceive전송:",alarm.getTime());
+
+            // helperPhoneNumber를 Intent에 추가
+            intent.putExtra("HELPER_PHONE_NUMBER", alarm.getHelper()); // 여기에 실제 번호를 넣어야 함
+
             PendingIntent pendingIntent = PendingIntent.getBroadcast(this, alarm.getAlarmId(), intent, PendingIntent.FLAG_ONE_SHOT);
 
             Calendar calendar = Calendar.getInstance();
