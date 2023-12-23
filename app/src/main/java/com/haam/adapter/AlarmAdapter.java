@@ -269,6 +269,8 @@ public class AlarmAdapter extends RecyclerView.Adapter<AlarmAdapter.AlarmViewHol
                 // 선택한 아이템의 알람음 업데이트
                 String selectedAlarmSound = (String) spinnerAlarmSound.getSelectedItem();
                 selectedItem.setRingTone(selectedAlarmSound);
+                //선택한 아이템의 알람제목 업데이트
+                selectedItem.setTitle(String.valueOf(editTextAlarmName.getText()));
 
                 // 리사이클러뷰 업데이트
                 notifyItemChanged(position);
