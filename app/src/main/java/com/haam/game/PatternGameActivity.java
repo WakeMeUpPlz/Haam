@@ -16,6 +16,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class PatternGameActivity extends AppCompatActivity {
+    private static final int[]BLOCKED= {Integer.parseInt("02"),Integer.parseInt("06"),Integer.parseInt("08"),17,20,26,28,35,53,60,62,68,71,80,82,86};
     PatternLockView patternLockView;
     TextView passwordTextView;
     String restorePassword;
@@ -64,8 +65,8 @@ public class PatternGameActivity extends AppCompatActivity {
             }
         });
     }
-    private static boolean containsExcludedNumbers(ArrayList<Integer> digits, Integer... excludedNumbers) {
-        for(Integer excludedNumber : excludedNumbers) {
+    private static boolean containsExcludedNumbers(ArrayList<Integer> digits) {
+        for(Integer excludedNumber : BLOCKED) {
             if (digits.contains(excludedNumber))
                 return true;
         }
@@ -77,12 +78,12 @@ public class PatternGameActivity extends AppCompatActivity {
         for (int i = 0; i < 9; i++) {
             digits.add(i);
         }
-        Collections.shuffle(digits);
-        // 숫자 순서 섞기
-        /*do {
+        //Collections.shuffle(digits);
+        // BLOCKED 숫자 들어 가지 않을 떄 까지 순서 섞기
+        do {
             Collections.shuffle(digits);
             // 해당 숫자 제외하기
-        } while (containsExcludedNumbers(digits, Integer.parseInt("02"),Integer.parseInt("06"),Integer.parseInt("08"),17,20,26,28,35,53,60,62,68,71,80,82,86));*/
+        } while (containsExcludedNumbers(digits));
         StringBuilder randomNum = new StringBuilder();
         // 4자리 비밀번호
         for (int i = 0; i < 4; i++) {
