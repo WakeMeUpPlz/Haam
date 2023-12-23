@@ -98,44 +98,45 @@ public class SQLiteHelper extends SQLiteOpenHelper {
         db.close();
     }
 
-        // 알람 삽입 함수
-    public static void insertAlarm(Context context, int id, String time, String description,
-                                   String category, String helper, String phoneNumber,
-                                   boolean isEnabled, boolean isRepeated, String period) {
+    // 알람 삽입 함수
+    public static void insertAlarm(Context context, int alarmId, String time, String title,
+                                   String ringTone, String helper, String dates, boolean isActivated,
+                                   boolean isHelperActivated, String dorN) {
         SQLiteDatabase db = new SQLiteHelper(context).getWritableDatabase();
         ContentValues values = new ContentValues();
-        values.put("Id", id);
+        values.put("AlarmId", alarmId);
         values.put("Time", time);
-        values.put("Description", description);
-        values.put("Category", category);
+        values.put("Title", title);
+        values.put("RingTone", ringTone);
         values.put("Helper", helper);
-        values.put("PhoneNumber", phoneNumber);
-        values.put("IsEnabled", isEnabled ? 1 : 0);
-        values.put("IsRepeated", isRepeated ? 1 : 0);
-        values.put("Period", period);
+        values.put("Dates", dates);
+        values.put("IsActivated", isActivated ? 1 : 0);
+        values.put("IsHelperActivated", isHelperActivated ? 1 : 0);
+        values.put("DoRN", dorN);
 
         db.insert("Alarms", null, values);
         db.close();
     }
 
-        //알람 반환 함수
+
+    //알람 반환 함수
     public static List<Alarm> getAllAlarms(Context context) {
         List<Alarm> alarmList = new ArrayList<>();
         SQLiteDatabase db = new SQLiteHelper(context).getReadableDatabase();
         Cursor cursor = db.rawQuery("SELECT * FROM Alarms", null);
 
         while (cursor.moveToNext()) {
-            @SuppressLint("Range") int id = cursor.getInt(cursor.getColumnIndex("Id"));
+            @SuppressLint("Range") int alarmId = cursor.getInt(cursor.getColumnIndex("AlarmId"));
             @SuppressLint("Range") String time = cursor.getString(cursor.getColumnIndex("Time"));
-            @SuppressLint("Range") String description = cursor.getString(cursor.getColumnIndex("Description"));
-            @SuppressLint("Range") String category = cursor.getString(cursor.getColumnIndex("Category"));
+            @SuppressLint("Range") String title = cursor.getString(cursor.getColumnIndex("Title"));
+            @SuppressLint("Range") String ringTone = cursor.getString(cursor.getColumnIndex("RingTone"));
             @SuppressLint("Range") String helper = cursor.getString(cursor.getColumnIndex("Helper"));
-            @SuppressLint("Range") String phoneNumber = cursor.getString(cursor.getColumnIndex("PhoneNumber"));
-            @SuppressLint("Range") boolean isEnabled = cursor.getInt(cursor.getColumnIndex("IsEnabled")) == 1;
-            @SuppressLint("Range") boolean isRepeated = cursor.getInt(cursor.getColumnIndex("IsRepeated")) == 1;
-            @SuppressLint("Range") String period = cursor.getString(cursor.getColumnIndex("Period"));
+            @SuppressLint("Range") String dates = cursor.getString(cursor.getColumnIndex("Dates"));
+            @SuppressLint("Range") boolean isActivated = cursor.getInt(cursor.getColumnIndex("IsActivated")) == 1;
+            @SuppressLint("Range") boolean isHelperActivated = cursor.getInt(cursor.getColumnIndex("IsHelperActivated")) == 1;
+            @SuppressLint("Range") String dorN = cursor.getString(cursor.getColumnIndex("DoRN"));
 
-            Alarm alarm = new Alarm(id, time, description, category, helper, phoneNumber, isEnabled, isRepeated, period);
+            Alarm alarm = new Alarm(alarmId, time, title, ringTone, helper, dates, isActivated, isHelperActivated, dorN);
             alarmList.add(alarm);
         }
 
@@ -144,24 +145,28 @@ public class SQLiteHelper extends SQLiteOpenHelper {
         return alarmList;
     }
 
-    //알람 수정 함수
-        public static void updateAlarm(Context context, int id, String time, String description,
-                                   String category, String helper, String phoneNumber,
-                                   boolean isEnabled, boolean isRepeated, String period) {
+
+
+    // 알람 수정 함수
+    public static void updateAlarm(Context context, int alarmId, String time, String title,
+                                   String ringTone, String helper, String dates,
+                                   boolean isActivated, boolean isHelperActivated, String dorN) {
         SQLiteDatabase db = new SQLiteHelper(context).getWritableDatabase();
         ContentValues values = new ContentValues();
+        values.put("AlarmId", alarmId);
         values.put("Time", time);
-        values.put("Description", description);
-        values.put("Category", category);
+        values.put("Title", title);
+        values.put("RingTone", ringTone);
         values.put("Helper", helper);
-        values.put("PhoneNumber", phoneNumber);
-        values.put("IsEnabled", isEnabled ? 1 : 0);
-        values.put("IsRepeated", isRepeated ? 1 : 0);
-        values.put("Period", period);
+        values.put("Dates", dates);
+        values.put("IsActivated", isActivated ? 1 : 0);
+        values.put("IsHelperActivated", isHelperActivated ? 1 : 0);
+        values.put("DoRN", dorN);
 
-        db.update("Alarms", values, "Id=?", new String[]{String.valueOf(id)});
+        db.update("Alarms", values, "Id=?", new String[]{String.valueOf(alarmId)});
         db.close();
     }
+
 
     //알람 삭제 함수
         public static void deleteAlarm(Context context, int alarmId) {
