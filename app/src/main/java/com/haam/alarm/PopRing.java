@@ -3,10 +3,11 @@ package com.haam.alarm;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.media.Ringtone;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.util.Log;
 import android.widget.Toast;
-
-import com.haam.game.PopRingActivity;
 
 public class PopRing extends BroadcastReceiver {
     @Override
@@ -20,6 +21,7 @@ public class PopRing extends BroadcastReceiver {
         // 예를 들어, PopRing 액티비티를 시작하는 코드를 여기에 추가할 수 있습니다.
         Intent popRingIntent = new Intent(context, PopRingActivity.class);
         popRingIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        popRingIntent.putExtra("ALARM_ID", alarmId);
         context.startActivity(popRingIntent);
     }
 }

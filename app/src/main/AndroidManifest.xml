@@ -19,8 +19,11 @@
                 <action android:name="com.haam.alarm.ACTION_ALARM" />
                 <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
-
         </receiver>
+        <activity
+            android:name=".alarm.PopRingActivity"
+            android:exported="false">
+        </activity>
 
         <activity
             android:name=".game.MultiplyGameActivity"
@@ -38,14 +41,11 @@
         </activity>
         <activity
             android:name=".game.PatternGameActivity"
-            android:exported="false">
+            android:exported="true">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
-        <activity
-            android:name=".game.PopRingActivity"
-            android:exported="false"></activity>
         <activity
             android:name=".MainActivity"
             android:exported="true">
