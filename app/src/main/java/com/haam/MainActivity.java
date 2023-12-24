@@ -54,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
 
         recyclerView = findViewById(R.id.rvAlarmList);
         alarmList = new ArrayList<>();
-        alarmList.add(new Alarm(1, "03:18", "Wake up", "default", "01012345678", "1000111", true, false, "AM"));
+        alarmList.add(new Alarm(1, "02:15", "Wake up", "default", "01012345678", "1000111", true, false, "AM"));
         alarmList.add(new Alarm(2, "00:58", "Lunch time", "default", "01011112222", "1111111", false, false, "AM"));
         alarmList.add(new Alarm(3, "08:30", "Exercise", "default", "01033334444", "1110000", true, false, "AM"));
 
@@ -107,7 +107,7 @@ public class MainActivity extends AppCompatActivity {
             // helperPhoneNumber를 Intent에 추가
             intent.putExtra("HELPER_PHONE_NUMBER", alarm.getHelper()); // 여기에 실제 번호를 넣어야 함
 
-            PendingIntent pendingIntent = PendingIntent.getBroadcast(this, alarm.getAlarmId(), intent, PendingIntent.FLAG_ONE_SHOT);
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(this, alarm.getAlarmId(), intent, PendingIntent.FLAG_MUTABLE);
 
             Calendar calendar = Calendar.getInstance();
             String[] time= alarm.getTime().split(":");

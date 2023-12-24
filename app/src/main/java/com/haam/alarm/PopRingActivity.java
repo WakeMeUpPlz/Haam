@@ -82,6 +82,4 @@ public class PopRingActivity extends AppCompatActivity {
             e.printStackTrace();
         }
     }
-
-
 }
