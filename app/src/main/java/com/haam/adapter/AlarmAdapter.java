@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
@@ -25,7 +26,9 @@ import android.widget.ToggleButton;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.haam.MainActivity;
 import com.haam.R;
+import com.haam.SQLiteHelper;
 import com.haam.models.Alarm;
 
 import java.util.ArrayList;
@@ -39,6 +42,12 @@ public class AlarmAdapter extends RecyclerView.Adapter<AlarmAdapter.AlarmViewHol
     public AlarmAdapter(List<Alarm> alarmList, Context context) {
         this.alarmList = alarmList;
         this.context = context;
+    }
+    public void setAlarmList(List<Alarm> newAlarmList) {
+        this.alarmList = newAlarmList;
+        notifyDataSetChanged();
+        // Call the setupAlarms method whenever alarmList is changed
+        ((MainActivity) context).setupAlarms();
     }
 
     @NonNull
@@ -79,23 +88,7 @@ public class AlarmAdapter extends RecyclerView.Adapter<AlarmAdapter.AlarmViewHol
             }
         }
     }
-    // 알람음 목록 가져오기
-    private ArrayAdapter<String> getAlarmSoundsAdapter() {
-        RingtoneManager ringtoneManager = new RingtoneManager(context);
-        ringtoneManager.setType(RingtoneManager.TYPE_NOTIFICATION); // 소리 재생
 
-        Cursor cursor = ringtoneManager.getCursor();
-
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-        while (cursor.moveToNext()) {
-            String title = cursor.getString(RingtoneManager.TITLE_COLUMN_INDEX);
-            adapter.add(title);
-        }
-
-        return adapter;
-    }
     //알람 추가를 위한 팝업
     public void initPopup() {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
@@ -106,7 +99,22 @@ public class AlarmAdapter extends RecyclerView.Adapter<AlarmAdapter.AlarmViewHol
         Button deleteAlarmBtn= view.findViewById(R.id.deleteAlarmBtn);
         deleteAlarmBtn.setVisibility(View.GONE);
         TimePicker timePicker = view.findViewById(R.id.alarmTimeSelector2);
+
         EditText editTextAlarmName = view.findViewById(R.id.editTextAlarmName);
+
+        Switch switchHelper= view.findViewById(R.id.switchHelper);
+        EditText editTextPhoneNumber=view.findViewById(R.id.editTextPhoneNumber);
+
+        switchHelper.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (!isChecked) {
+                    editTextPhoneNumber.setVisibility(View.GONE);
+                } else {
+                    editTextPhoneNumber.setVisibility(View.VISIBLE);
+                }
+            }
+        });
 
         // 체크박스 초기화
         CheckBox checkBoxMonday = view.findViewById(R.id.checkBoxMonday);
@@ -140,6 +148,12 @@ public class AlarmAdapter extends RecyclerView.Adapter<AlarmAdapter.AlarmViewHol
                 int alarmId = alarmList.size() + 1;
                 String time = String.format("%02d:%02d", hour, minute);
                 String title = String.valueOf(editTextAlarmName.getText());
+                String phoneNumber;
+                if(!String.valueOf(editTextPhoneNumber.getText()).isEmpty()){
+                    phoneNumber=String.valueOf(editTextPhoneNumber.getText());
+                }else{
+                    phoneNumber="";
+                }
 
                 // 요일 정보 가져오기
                 boolean[] week = {
@@ -153,11 +167,12 @@ public class AlarmAdapter extends RecyclerView.Adapter<AlarmAdapter.AlarmViewHol
                 };
 
                 // 새로운 알람 객체 생성
-                Alarm newAlarm = new Alarm(alarmId, time, title, "default", "Helper", booleanArrayToString(week), true, false, dorN);
-
-                // 알람을 추가하고 리사이클러뷰 업데이트
-                alarmList.add(newAlarm);
-                notifyDataSetChanged(); // 리사이클러뷰 갱신
+//                Alarm newAlarm = new Alarm(alarmId, time, title, "default", phoneNumber, booleanArrayToString(week), true, false, dorN);
+                SQLiteHelper.insertAlarm(
+                        context,alarmId, time, title, "default", phoneNumber,  booleanArrayToString(week), true, false, dorN);
+               // 알람을 추가하고 리사이클러뷰 업데이트
+//                alarmList.add(newAlarm);
+                setAlarmList(alarmList);
             }
         });
 
@@ -194,6 +209,8 @@ public class AlarmAdapter extends RecyclerView.Adapter<AlarmAdapter.AlarmViewHol
         deleteAlarmBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                SQLiteHelper.deleteAlarm(context,alarm.getAlarmId());
                 // 현재 위치의 알람을 삭제
                 alarmList.remove(position);
                 // 다이얼로그 닫기
@@ -210,20 +227,6 @@ public class AlarmAdapter extends RecyclerView.Adapter<AlarmAdapter.AlarmViewHol
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             timePicker.setHour(Integer.parseInt(Time[0]));
             timePicker.setMinute(Integer.parseInt(Time[1]));
-        }
-        // 스피너 초기화 및 알람음 목록 가져오기
-        Spinner spinnerAlarmSound = view.findViewById(R.id.spinnerAlarmSound);
-        ArrayAdapter<String> alarmSoundsAdapter = getAlarmSoundsAdapter();
-        spinnerAlarmSound.setAdapter(alarmSoundsAdapter);
-        // 알람음 가져오기 (초기 선택 값 설정을 위한 로직)
-        String initialAlarmSound = alarm.getRingTone(); // 실제 구현되어야 함
-
-        // 알람음이 존재한다면 해당 알람음의 인덱스를 찾아 설정
-        if (initialAlarmSound != null) {
-            int alarmsSoundPosition = alarmSoundsAdapter.getPosition(initialAlarmSound);
-            if (alarmsSoundPosition != -1) {
-                spinnerAlarmSound.setSelection(alarmsSoundPosition);
-            }
         }
 
         // 알람 활성화
@@ -251,6 +254,28 @@ public class AlarmAdapter extends RecyclerView.Adapter<AlarmAdapter.AlarmViewHol
         EditText editTextAlarmName=view.findViewById(R.id.editTextAlarmName);
         editTextAlarmName.setText(alarmList.get(position).getTitle());
 
+        Switch switchHelper= view.findViewById(R.id.switchHelper);
+        EditText editTextPhoneNumber=view.findViewById(R.id.editTextPhoneNumber);
+        switchHelper.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (!isChecked) {
+                    editTextPhoneNumber.setVisibility(View.GONE);
+                } else {
+                    editTextPhoneNumber.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+        if (!alarmList.get(position).getHelper().isEmpty()) {
+            switchHelper.setChecked(true); // 휴대폰 번호가 있으면 스위치를 활성화합니다.
+            editTextPhoneNumber.setText(alarmList.get(position).getHelper());
+        } else {
+            switchHelper.setChecked(false); // 휴대폰 번호가 없으면 스위치를 비활성화합니다.
+        }
+
+
+
+
         // 팝업의 확인 버튼 등을 설정
         builder.setPositiveButton("저장", new DialogInterface.OnClickListener() {
             int hour, minute;
@@ -271,7 +296,8 @@ public class AlarmAdapter extends RecyclerView.Adapter<AlarmAdapter.AlarmViewHol
 
                 // 리사이클러뷰에서 선택한 아이템의 데이터 가져오기
                 Alarm selectedItem = alarmList.get(position);
-
+                //선택한 아이템의 알람제목 업데이트
+                selectedItem.setTitle(String.valueOf(editTextAlarmName.getText()));
                 // 선택한 아이템의 시간 업데이트
                 selectedItem.setTime(String.format("%02d:%02d", hour, minute));
                 if (hour>=12){
@@ -292,14 +318,23 @@ public class AlarmAdapter extends RecyclerView.Adapter<AlarmAdapter.AlarmViewHol
                 selectedItem.setDates(updatedDates.toString());
 
                 selectedItem.setDorN(dorN);
-                // 선택한 아이템의 알람음 업데이트
-                String selectedAlarmSound = (String) spinnerAlarmSound.getSelectedItem();
-                selectedItem.setRingTone(selectedAlarmSound);
-                //선택한 아이템의 알람제목 업데이트
-                selectedItem.setTitle(String.valueOf(editTextAlarmName.getText()));
 
-                // 리사이클러뷰 업데이트
-                notifyItemChanged(position);
+                //선택한 아이템의 알람제목 업데이트
+                //selectedItem.setTitle(String.valueOf(editTextAlarmName.getText()));
+
+                String phoneNumber = String.valueOf(editTextPhoneNumber.getText());
+                if (!phoneNumber.isEmpty() && editTextPhoneNumber.getVisibility()==View.VISIBLE) {
+                    selectedItem.setHelper(String.valueOf(editTextAlarmName.getText()));
+                } else {
+                    selectedItem.setHelper("");
+                }
+                SQLiteHelper.updateAlarm(context,alarm.getAlarmId(),alarm.getTime(),alarm.getTitle(),
+                        alarm.getRingTone(),alarm.getHelper(),alarm.getDates(),alarm.getIsActivated(),
+                        alarm.getIsHelperActivated(),alarm.getDorN());
+
+                //알람갱신
+                setAlarmList(alarmList);
+
             }
         });
 
