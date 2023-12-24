@@ -6,6 +6,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.text.Editable;
 import android.util.Log;
 
 import com.haam.models.Alarm;
@@ -21,6 +22,7 @@ public class SQLiteHelper extends SQLiteOpenHelper {
     public SQLiteHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
+
 
     @Override
     public void onCreate(SQLiteDatabase db) {
@@ -169,7 +171,7 @@ public class SQLiteHelper extends SQLiteOpenHelper {
         values.put("IsHelperActivated", isHelperActivated ? 1 : 0);
         values.put("DorN", dorN);
 
-        db.update("Alarms", values, "Id=?", new String[]{String.valueOf(alarmId)});
+        db.update("Alarms", values, "AlarmId=?", new String[]{String.valueOf(alarmId)});
         db.close();
     }
 
