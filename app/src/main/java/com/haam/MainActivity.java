@@ -55,9 +55,21 @@ public class MainActivity extends AppCompatActivity {
 
         recyclerView = findViewById(R.id.rvAlarmList);
         alarmList = new ArrayList<>();
-        alarmList.add(new Alarm(1, "11:46", "Wake up", "default", "01012345678", "1000111", true, false, "AM"));
-        alarmList.add(new Alarm(2, "00:58", "Lunch time", "default", "01011112222", "1111111", false, false, "AM"));
-        alarmList.add(new Alarm(3, "08:30", "Exercise", "default", "01033334444", "1110000", true, false, "AM"));
+        SQLiteHelper.insertAlarm(
+                getApplicationContext(),1, "11:46", "Wake up", "default", "01012345678", "1000111", true, false, "AM");
+
+        List<Alarm> alarmList = SQLiteHelper.getAllAlarms(getApplicationContext());
+
+        if (alarmList.size() == 0) {
+            Log.d("alarm size", "알람 데이터가 없습니다");
+        }
+
+
+        for (Alarm alarm : alarmList) {
+            Log.d("Alarm", "Id: " + alarm.getAlarmId());
+            Log.d("Alarm", "title: " + alarm.getTitle());
+            // ... log other properties as needed
+        }
 
         if(alarmList.size()!=0){
             recyclerView.setVisibility(View.VISIBLE);
