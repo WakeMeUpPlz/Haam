@@ -49,6 +49,8 @@ public class SignupActivity extends AppCompatActivity {
 
         textViewPasswordMismatch = findViewById(R.id.textViewPasswordMismatch);
 
+        TextView textViewLogin = findViewById(R.id.buttonLogin);
+
         // 아이디 중복 확인 버튼 클릭 시
         buttonCheckUsername.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -112,6 +114,15 @@ public class SignupActivity extends AppCompatActivity {
                 startActivity(new Intent(SignupActivity.this, LoginActivity.class));
             }
         });
+
+        // TextView for "로그인 하기"
+        textViewLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Start the LoginActivity when "로그인 하기" is clicked
+                startActivity(new Intent(SignupActivity.this, LoginActivity.class));
+            }
+        });
     }
 
     // 아이디 중복 확인 메서드
@@ -141,5 +152,6 @@ public class SignupActivity extends AppCompatActivity {
     private void showToast(String message) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
+
 
 }
