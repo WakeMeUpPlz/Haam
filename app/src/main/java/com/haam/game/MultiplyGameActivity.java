@@ -54,8 +54,8 @@ public class MultiplyGameActivity extends AppCompatActivity {
                 ringtone.stop();
                 int alarmId = getIntent().getIntExtra("ALARM_ID", -1);
                 stopAlarm(alarmId); // 알람 종료
-                Intent TraceIntent = new Intent(MultiplyGameActivity.this, MainActivity.class);
-                startActivity(TraceIntent);
+                Intent intent = new Intent(MultiplyGameActivity.this, MainActivity.class);
+                startActivity(intent);
             } else {
                 Toast.makeText(getApplicationContext(), "오답입니다.", Toast.LENGTH_SHORT).show();
                 generateQuestion();
@@ -69,7 +69,9 @@ public class MultiplyGameActivity extends AppCompatActivity {
 
         AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
         if (alarmManager != null) {
+            // 해당 PendingIntent가 존재하면 취소
             alarmManager.cancel(pendingIntent);
+            pendingIntent.cancel();
         }
     }
 }

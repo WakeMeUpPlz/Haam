@@ -58,8 +58,8 @@ public class PatternGameActivity extends AppCompatActivity {
                         ringtone.stop();
                         int alarmId = getIntent().getIntExtra("ALARM_ID", -1);
                         stopAlarm(alarmId); // 알람 종료
-                        Intent TraceIntent = new Intent(PatternGameActivity.this, MainActivity.class);
-                        startActivity(TraceIntent);
+                        Intent intent = new Intent(PatternGameActivity.this, MainActivity.class);
+                        startActivity(intent);
                         //파랑
                     }
                     //2-2 입력과 저장된 패스워드가 다르다면
@@ -109,7 +109,9 @@ public class PatternGameActivity extends AppCompatActivity {
 
         AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
         if (alarmManager != null) {
+            // 해당 PendingIntent가 존재하면 취소
             alarmManager.cancel(pendingIntent);
+            pendingIntent.cancel();
         }
     }
 }
