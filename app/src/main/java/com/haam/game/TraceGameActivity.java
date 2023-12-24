@@ -17,6 +17,7 @@ import android.widget.Toast;
 import com.haam.MainActivity;
 import com.haam.R;
 import com.haam.alarm.PopRing;
+import com.haam.alarm.PopRingActivity;
 
 import java.util.Random;
 
@@ -60,6 +61,7 @@ public class TraceGameActivity extends AppCompatActivity {
             setResult(RESULT_OK, intent);
             finish();
         } else {
+            PopRingActivity.INCORRECT_ANSWER_NUM= PopRingActivity.INCORRECT_ANSWER_NUM+1;
             Toast.makeText(getApplicationContext(), "오답입니다.", Toast.LENGTH_SHORT).show();
             generateRandomString();
             userInput.setText("");

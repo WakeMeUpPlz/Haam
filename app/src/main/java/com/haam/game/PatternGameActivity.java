@@ -18,6 +18,7 @@ import com.andrognito.patternlockview.utils.PatternLockUtils;
 import com.haam.MainActivity;
 import com.haam.R;
 import com.haam.alarm.PopRing;
+import com.haam.alarm.PopRingActivity;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -66,6 +67,7 @@ public class PatternGameActivity extends AppCompatActivity {
                     else {
                         //패턴 색상 변경
                         patternLockView.setCorrectStateColor(Color.parseColor("#FF0000"));
+                        PopRingActivity.INCORRECT_ANSWER_NUM= PopRingActivity.INCORRECT_ANSWER_NUM+1;
                         //빨강
                     }
                 }

@@ -28,10 +28,11 @@ import com.haam.game.TraceGameActivity;
 import java.util.Random;
 
 public class PopRingActivity extends AppCompatActivity {
+    public static int INCORRECT_ANSWER_NUM =0 ;
     Button goPatternBtn;
     TextView viewTime;
     private Ringtone ringtone;
-    private static final int MY_PERMISSIONS_REQUEST_SEND_SMS = 1;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -45,26 +46,6 @@ public class PopRingActivity extends AppCompatActivity {
         viewTime.setText(alarmTime);
 
 
-        //헬퍼에게 메세지 보내기
-        // 메시지를 보낼 번호와 내용
-
-        String helperPhoneNumber = getIntent().getStringExtra("HELPER_PHONE_NUMBER"); // 여기서 값을 받아옴
-        String message = "깨워 주세요.";
-
-        // SmsManager 인스턴스 가져오기
-        SmsManager smsManager = SmsManager.getDefault();
-
-        // PendingIntent를 사용하여 메시지 전송 결과를 처리
-        PendingIntent sentIntent = PendingIntent.getBroadcast(this, 0, new Intent("SMS_SENT"), 0);
-
-        try {
-            // 메시지 전송
-            smsManager.sendTextMessage(helperPhoneNumber, null, message, sentIntent, null);
-        } catch (Exception e) {
-            e.printStackTrace();
-            Toast.makeText(this, "메시지 전송 실패", Toast.LENGTH_SHORT).show();
-        }
-
         ActivityResultLauncher<Intent> launcher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
                 result -> {
@@ -72,6 +53,23 @@ public class PopRingActivity extends AppCompatActivity {
                         stopAlarm(); // 알람 종료
                         Intent intent1 = new Intent(PopRingActivity.this, MainActivity.class);
                         startActivity(intent1);
+                    }
+                    else if(INCORRECT_ANSWER_NUM>=3){//오답일 경우 헬퍼에게 메시지 보내기
+                        // 메시지를 보낼 번호와 내용
+                        String helperPhoneNumber = getIntent().getStringExtra("HELPER_PHONE_NUMBER"); // 여기서 값을 받아옴
+                        String message = "깨워 주세요.";
+                        SmsManager smsManager = SmsManager.getDefault();
+                        // PendingIntent를 사용하여 메시지 전송 결과를 처리
+                        PendingIntent sentIntent = PendingIntent.getBroadcast(this, 0, new Intent("SMS_SENT"), 0);
+                        try {
+                            // 메시지 전송
+                            smsManager.sendTextMessage(helperPhoneNumber, null, message, sentIntent, null);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            Toast.makeText(this, "메시지 전송 실패", Toast.LENGTH_SHORT).show();
+                        }
+                    }else{
+                        //알람 울리기
                     }
         });
 
