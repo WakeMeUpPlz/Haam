@@ -172,6 +172,7 @@ public class AlarmAdapter extends RecyclerView.Adapter<AlarmAdapter.AlarmViewHol
                         context,alarmId, time, title, "default", phoneNumber,  booleanArrayToString(week), true, false, dorN);
                // 알람을 추가하고 리사이클러뷰 업데이트
 //                alarmList.add(newAlarm);
+                alarmList = SQLiteHelper.getAllAlarms(context);
                 setAlarmList(alarmList);
             }
         });
@@ -320,11 +321,11 @@ public class AlarmAdapter extends RecyclerView.Adapter<AlarmAdapter.AlarmViewHol
                 selectedItem.setDorN(dorN);
 
                 //선택한 아이템의 알람제목 업데이트
-                //selectedItem.setTitle(String.valueOf(editTextAlarmName.getText()));
+                selectedItem.setTitle(String.valueOf(editTextAlarmName.getText()));
 
                 String phoneNumber = String.valueOf(editTextPhoneNumber.getText());
                 if (!phoneNumber.isEmpty() && editTextPhoneNumber.getVisibility()==View.VISIBLE) {
-                    selectedItem.setHelper(String.valueOf(editTextAlarmName.getText()));
+                    selectedItem.setHelper(String.valueOf(editTextPhoneNumber.getText()));
                 } else {
                     selectedItem.setHelper("");
                 }

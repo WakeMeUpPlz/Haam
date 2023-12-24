@@ -55,14 +55,8 @@ public class MainActivity extends AppCompatActivity {
 
         recyclerView = findViewById(R.id.rvAlarmList);
 
-//        SQLiteHelper.insertAlarm(
-//                getApplicationContext(),1, "10:00", "Wake up", "default", "01012345678", "1000111", true, false, "PM");
 
         alarmList = SQLiteHelper.getAllAlarms(getApplicationContext());
-
-        if (alarmList.size() == 0) {
-            Log.d("alarm size", "알람 데이터가 없습니다");
-        }
 
 
 
@@ -84,7 +78,9 @@ public class MainActivity extends AppCompatActivity {
             recyclerView.setVisibility(View.GONE);
             tvAlarmNo.setVisibility(View.VISIBLE);
             // 알람이 0개인 경우 어댑터를 null로 설정
-            alarmAdapter = null;
+            alarmAdapter = new AlarmAdapter(new ArrayList<>(), this);
+            recyclerView.setAdapter(alarmAdapter);
+            recyclerView.setLayoutManager(new LinearLayoutManager(this));;
         }
 
         //알람추가 버튼
@@ -92,6 +88,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 alarmAdapter.initPopup();
+                // 어댑터가 이미 존재하는 경우에는 데이터를 업데이트
+                alarmAdapter.setAlarmList(alarmList);
             }
         });
 
@@ -135,9 +133,14 @@ public class MainActivity extends AppCompatActivity {
             calendar.set(Calendar.HOUR_OF_DAY,Integer.parseInt(time[0]));
             calendar.set(Calendar.MINUTE,Integer.parseInt(time[1]));
             calendar.set(Calendar.SECOND,0);
+            Log.d("onReceive전송,캘린더시간", String.valueOf(calendar.getTimeInMillis()));
+            Log.d("onReceive전송,현재시간", String.valueOf(System.currentTimeMillis()));
             // 현재 시간과 비교하여 알람이 현재 시간보다 이전이면 스킵
             if(calendar.getTimeInMillis()<=System.currentTimeMillis()){
+                Log.d("onReceive전송,스킵", String.valueOf(calendar.getTimeInMillis()));
+                Log.d("onReceive전송,스킵", String.valueOf(System.currentTimeMillis()));
                 continue;
+
             }
             alarmManager.set(AlarmManager.RTC_WAKEUP,calendar.getTimeInMillis(),pendingIntent);
         }
