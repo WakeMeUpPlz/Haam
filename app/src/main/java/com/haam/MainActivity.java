@@ -1,18 +1,5 @@
 package com.haam;
 
-import android.app.AlarmManager;
-import android.app.PendingIntent;
-import android.content.Context;
-import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.os.Build;
-import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
-import android.widget.Button;
-import android.widget.TextView;
-import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -20,11 +7,30 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.annotation.SuppressLint;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
+import android.os.Bundle;
+import android.os.SystemClock;
+import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
+import android.widget.Toast;
+
 import com.haam.adapter.AlarmAdapter;
+import com.haam.alarm.PopRing;
 import com.haam.models.Alarm;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -49,9 +55,21 @@ public class MainActivity extends AppCompatActivity {
 
         recyclerView = findViewById(R.id.rvAlarmList);
         alarmList = new ArrayList<>();
-        alarmList.add(new Alarm(1, "13:43", "Wake up", "default", "01012345678", "1000111", true, false, "PM"));
-        alarmList.add(new Alarm(2, "00:58", "Lunch time", "default", "01011112222", "1111111", false, false, "AM"));
-        alarmList.add(new Alarm(3, "08:30", "Exercise", "default", "01033334444", "1110000", true, false, "AM"));
+        SQLiteHelper.insertAlarm(
+                getApplicationContext(),1, "11:46", "Wake up", "default", "01012345678", "1000111", true, false, "AM");
+
+        List<Alarm> alarmList = SQLiteHelper.getAllAlarms(getApplicationContext());
+
+        if (alarmList.size() == 0) {
+            Log.d("alarm size", "알람 데이터가 없습니다");
+        }
+
+
+        for (Alarm alarm : alarmList) {
+            Log.d("Alarm", "Id: " + alarm.getAlarmId());
+            Log.d("Alarm", "title: " + alarm.getTitle());
+            // ... log other properties as needed
+        }
 
         if(alarmList.size()!=0){
             recyclerView.setVisibility(View.VISIBLE);
@@ -66,7 +84,12 @@ public class MainActivity extends AppCompatActivity {
         }
 
         //알람추가 버튼
-        addAlarmBtn.setOnClickListener(view -> alarmAdapter.initPopup());
+        addAlarmBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                alarmAdapter.initPopup();
+            }
+        });
         // 알람 설정 및 울리도록 하는 코드
         setupAlarms();
     }

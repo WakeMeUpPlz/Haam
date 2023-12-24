@@ -28,7 +28,7 @@ public class SQLiteHelper extends SQLiteOpenHelper {
         db.execSQL("CREATE TABLE IF NOT EXISTS Users (ID TEXT PRIMARY KEY, password TEXT, Name TEXT, phoneNumber TEXT);");
 
         // Alarms 테이블 생성
-        db.execSQL("CREATE TABLE IF NOT EXISTS Alarms (Id INTEGER PRIMARY KEY, Time TEXT, Description TEXT, Category TEXT, Helper TEXT, PhoneNumber TEXT, IsEnabled INTEGER, IsRepeated INTEGER, Period TEXT);");
+        db.execSQL("CREATE TABLE IF NOT EXISTS Alarms (AlarmId INTEGER PRIMARY KEY, Time TEXT, Title TEXT, RingTone TEXT, Helper TEXT, Dates TEXT, IsActivated INTEGER, IsHelperActivated INTEGER, DorN TEXT);");
         // 예시 데이터 삽입
         db.execSQL("INSERT INTO Users VALUES ('20211138', '12345', '오영서', '01041082379');");
     }
@@ -112,7 +112,7 @@ public class SQLiteHelper extends SQLiteOpenHelper {
         values.put("Dates", dates);
         values.put("IsActivated", isActivated ? 1 : 0);
         values.put("IsHelperActivated", isHelperActivated ? 1 : 0);
-        values.put("DoRN", dorN);
+        values.put("DorN", dorN);
 
         db.insert("Alarms", null, values);
         db.close();
@@ -125,25 +125,31 @@ public class SQLiteHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = new SQLiteHelper(context).getReadableDatabase();
         Cursor cursor = db.rawQuery("SELECT * FROM Alarms", null);
 
-        while (cursor.moveToNext()) {
-            @SuppressLint("Range") int alarmId = cursor.getInt(cursor.getColumnIndex("AlarmId"));
-            @SuppressLint("Range") String time = cursor.getString(cursor.getColumnIndex("Time"));
-            @SuppressLint("Range") String title = cursor.getString(cursor.getColumnIndex("Title"));
-            @SuppressLint("Range") String ringTone = cursor.getString(cursor.getColumnIndex("RingTone"));
-            @SuppressLint("Range") String helper = cursor.getString(cursor.getColumnIndex("Helper"));
-            @SuppressLint("Range") String dates = cursor.getString(cursor.getColumnIndex("Dates"));
-            @SuppressLint("Range") boolean isActivated = cursor.getInt(cursor.getColumnIndex("IsActivated")) == 1;
-            @SuppressLint("Range") boolean isHelperActivated = cursor.getInt(cursor.getColumnIndex("IsHelperActivated")) == 1;
-            @SuppressLint("Range") String dorN = cursor.getString(cursor.getColumnIndex("DoRN"));
+        if (cursor != null) {
+            try {
+                while (cursor.moveToNext()) {
+                    @SuppressLint("Range")int alarmId = cursor.getInt(cursor.getColumnIndexOrThrow("AlarmId"));
+                    @SuppressLint("Range")String time = cursor.getString(cursor.getColumnIndexOrThrow("Time"));
+                    @SuppressLint("Range")String title = cursor.getString(cursor.getColumnIndexOrThrow("Title"));
+                    @SuppressLint("Range")String ringTone = cursor.getString(cursor.getColumnIndexOrThrow("RingTone"));
+                    @SuppressLint("Range")String helper = cursor.getString(cursor.getColumnIndexOrThrow("Helper"));
+                    @SuppressLint("Range")String dates = cursor.getString(cursor.getColumnIndexOrThrow("Dates"));
+                    @SuppressLint("Range")boolean isActivated = cursor.getInt(cursor.getColumnIndexOrThrow("IsActivated")) == 1;
+                    @SuppressLint("Range")boolean isHelperActivated = cursor.getInt(cursor.getColumnIndexOrThrow("IsHelperActivated")) == 1;
+                    @SuppressLint("Range")String dorN = cursor.getString(cursor.getColumnIndexOrThrow("DorN"));
 
-            Alarm alarm = new Alarm(alarmId, time, title, ringTone, helper, dates, isActivated, isHelperActivated, dorN);
-            alarmList.add(alarm);
+                    Alarm alarm = new Alarm(alarmId, time, title, ringTone, helper, dates, isActivated, isHelperActivated, dorN);
+                    alarmList.add(alarm);
+                }
+            } finally {
+                cursor.close();
+            }
         }
 
-        cursor.close();
         db.close();
         return alarmList;
     }
+
 
 
 
@@ -161,7 +167,7 @@ public class SQLiteHelper extends SQLiteOpenHelper {
         values.put("Dates", dates);
         values.put("IsActivated", isActivated ? 1 : 0);
         values.put("IsHelperActivated", isHelperActivated ? 1 : 0);
-        values.put("DoRN", dorN);
+        values.put("DorN", dorN);
 
         db.update("Alarms", values, "Id=?", new String[]{String.valueOf(alarmId)});
         db.close();
@@ -171,7 +177,7 @@ public class SQLiteHelper extends SQLiteOpenHelper {
     //알람 삭제 함수
         public static void deleteAlarm(Context context, int alarmId) {
         SQLiteDatabase db = new SQLiteHelper(context).getWritableDatabase();
-        db.delete("Alarms", "Id=?", new String[]{String.valueOf(alarmId)});
+        db.delete("Alarms", "AlarmId=?", new String[]{String.valueOf(alarmId)});
         db.close();
     }
 }
