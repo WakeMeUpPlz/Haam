@@ -69,8 +69,6 @@ public class PopRingActivity extends AppCompatActivity {
                 new ActivityResultContracts.StartActivityForResult(),
                 result -> {
                     if (result.getResultCode() == RESULT_OK) {
-                        Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
-                        ringtone = RingtoneManager.getRingtone(getApplicationContext(), alarmSound);
                         stopAlarm(); // 알람 종료
                         Intent intent1 = new Intent(PopRingActivity.this, MainActivity.class);
                         startActivity(intent1);
@@ -101,14 +99,15 @@ public class PopRingActivity extends AppCompatActivity {
     private void stopAlarm() {
         if (ringtone != null && ringtone.isPlaying())
             ringtone.stop();
+        Intent alarmIntent = new Intent(this, PopRing.class); // 알람을 등록한 BroadcastReceiver 클래스로 변경
+        int alarmId = alarmIntent.getIntExtra("ALARM_ID", -1);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, alarmId, alarmIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+
+        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+        if (alarmManager != null) {
+            // 해당 PendingIntent가 존재하면 취소
+            alarmManager.cancel(pendingIntent);
+            pendingIntent.cancel();
+        }
     }
-    //        Intent alarmIntent = new Intent(this, PopRing.class); // 알람을 등록한 BroadcastReceiver 클래스로 변경
-//        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, alarmId, alarmIntent, PendingIntent.FLAG_CANCEL_CURRENT);
-//
-//        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-//        if (alarmManager != null) {
-//            // 해당 PendingIntent가 존재하면 취소
-//            alarmManager.cancel(pendingIntent);
-//            pendingIntent.cancel();
-//        }
 }
