@@ -41,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView tvAlarmNo;
     private Button addAlarmBtn;
     private static final int MY_PERMISSIONS_REQUEST_SEND_SMS = 1;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,6 +62,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         if (alarmList.size() != 0) {
+            Log.d("알람 추가됨(if)","alarmList사이즈0아님");
             recyclerView.setVisibility(View.VISIBLE);
             tvAlarmNo.setVisibility(View.GONE); // 알람 없음 표시 지우기
 
@@ -75,8 +77,11 @@ public class MainActivity extends AppCompatActivity {
                 alarmAdapter.setAlarmList(alarmList);
             }
         } else {
-            recyclerView.setVisibility(View.GONE);
-            tvAlarmNo.setVisibility(View.VISIBLE);
+            Log.d("알람 추가됨(if)","alarmList사이즈0임");
+            recyclerView.setVisibility(View.VISIBLE);
+            tvAlarmNo.setVisibility(View.GONE); // 알람 없음 표시 지우기
+            Toast.makeText(this, "등록된 알람이 없습니다. 알람을 등록해주세요", Toast.LENGTH_SHORT).show();
+
             // 알람이 0개인 경우 어댑터를 null로 설정
             alarmAdapter = new AlarmAdapter(new ArrayList<>(), this);
             recyclerView.setAdapter(alarmAdapter);
@@ -88,8 +93,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 alarmAdapter.initPopup();
-                // 어댑터가 이미 존재하는 경우에는 데이터를 업데이트
-                alarmAdapter.setAlarmList(alarmList);
             }
         });
 

@@ -7,6 +7,7 @@ import android.database.Cursor;
 import android.graphics.Color;
 import android.media.RingtoneManager;
 import android.os.Build;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,6 +46,7 @@ public class AlarmAdapter extends RecyclerView.Adapter<AlarmAdapter.AlarmViewHol
     }
     public void setAlarmList(List<Alarm> newAlarmList) {
         this.alarmList = newAlarmList;
+        Log.d("알람 추가됨(setAlarmList)",alarmList.toString());
         notifyDataSetChanged();
         // Call the setupAlarms method whenever alarmList is changed
         ((MainActivity) context).setupAlarms();
@@ -165,15 +167,14 @@ public class AlarmAdapter extends RecyclerView.Adapter<AlarmAdapter.AlarmViewHol
                         checkBoxSaturday.isChecked(),
                         checkBoxSunday.isChecked()
                 };
-
                 // 새로운 알람 객체 생성
 //                Alarm newAlarm = new Alarm(alarmId, time, title, "default", phoneNumber, booleanArrayToString(week), true, false, dorN);
                 SQLiteHelper.insertAlarm(
                         context,alarmId, time, title, "default", phoneNumber,  booleanArrayToString(week), true, false, dorN);
-               // 알람을 추가하고 리사이클러뷰 업데이트
-//                alarmList.add(newAlarm);
                 alarmList = SQLiteHelper.getAllAlarms(context);
                 setAlarmList(alarmList);
+                Log.d("알람 추가됨(AlarmAdapter)",alarmList.toString());
+
             }
         });
 
