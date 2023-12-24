@@ -71,7 +71,6 @@ public class PopRingActivity extends AppCompatActivity {
                     if (result.getResultCode() == RESULT_OK) {
                         Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
                         ringtone = RingtoneManager.getRingtone(getApplicationContext(), alarmSound);
-                        int alarmId = getIntent().getIntExtra("ALARM_ID", -1);
                         stopAlarm(); // 알람 종료
                         Intent intent1 = new Intent(PopRingActivity.this, MainActivity.class);
                         startActivity(intent1);
