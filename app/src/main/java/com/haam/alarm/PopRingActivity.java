@@ -1,24 +1,25 @@
 package com.haam.alarm;
 
+import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.telephony.SmsManager;
-import android.util.Log;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 
+import com.haam.MainActivity;
 import com.haam.R;
 import com.haam.game.MultiplyGameActivity;
 import com.haam.game.PatternGameActivity;
@@ -29,7 +30,9 @@ import java.util.Random;
 public class PopRingActivity extends AppCompatActivity {
     Button goPatternBtn;
     TextView viewTime;
+    private Ringtone ringtone;
     private static final int MY_PERMISSIONS_REQUEST_SEND_SMS = 1;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,6 +65,19 @@ public class PopRingActivity extends AppCompatActivity {
             Toast.makeText(this, "메시지 전송 실패", Toast.LENGTH_SHORT).show();
         }
 
+        ActivityResultLauncher<Intent> launcher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == RESULT_OK) {
+                        Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
+                        ringtone = RingtoneManager.getRingtone(getApplicationContext(), alarmSound);
+                        int alarmId = getIntent().getIntExtra("ALARM_ID", -1);
+                        stopAlarm(); // 알람 종료
+                        Intent intent1 = new Intent(PopRingActivity.this, MainActivity.class);
+                        startActivity(intent1);
+                    }
+        });
+
         goPatternBtn.setOnClickListener(view -> {
             Class<?>[] activities = {MultiplyGameActivity.class, PatternGameActivity.class, TraceGameActivity.class};
             Random random = new Random();
@@ -69,17 +85,31 @@ public class PopRingActivity extends AppCompatActivity {
             Class<?> selectedActivity = activities[randomIndex];
 
             Intent intent = new Intent(PopRingActivity.this, selectedActivity);
-            startActivity(intent);
+            launcher.launch(intent);
         });
+
     }
     private void playAlarmSound() {
         try {
             // 알람 기본음 울리기
             Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
-            Ringtone ringtone = RingtoneManager.getRingtone(getApplicationContext(), alarmSound);
+            ringtone = RingtoneManager.getRingtone(getApplicationContext(), alarmSound);
             ringtone.play();
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+    private void stopAlarm() {
+        if (ringtone != null && ringtone.isPlaying())
+            ringtone.stop();
+    }
+    //        Intent alarmIntent = new Intent(this, PopRing.class); // 알람을 등록한 BroadcastReceiver 클래스로 변경
+//        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, alarmId, alarmIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+//
+//        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+//        if (alarmManager != null) {
+//            // 해당 PendingIntent가 존재하면 취소
+//            alarmManager.cancel(pendingIntent);
+//            pendingIntent.cancel();
+//        }
 }

@@ -6,6 +6,8 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.media.Ringtone;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
@@ -54,26 +56,13 @@ public class TraceGameActivity extends AppCompatActivity {
         String userIn = userInput.getText().toString();
         if (userIn.equals(randomString)) {
             Toast.makeText(getApplicationContext(), "정답입니다.", Toast.LENGTH_SHORT).show();
-            ringtone.stop();
-            int alarmId = getIntent().getIntExtra("ALARM_ID", -1);
-            stopAlarm(alarmId); // 알람 종료
-            Intent intent = new Intent(TraceGameActivity.this, MainActivity.class);
-            startActivity(intent);
+            Intent intent = new Intent();
+            setResult(RESULT_OK, intent);
+            finish();
         } else {
             Toast.makeText(getApplicationContext(), "오답입니다.", Toast.LENGTH_SHORT).show();
             generateRandomString();
             userInput.setText("");
-        }
-    }
-    private void stopAlarm(int alarmId) {
-        Intent alarmIntent = new Intent(this, PopRing.class); // 알람을 등록한 BroadcastReceiver 클래스로 변경
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, alarmId, alarmIntent, PendingIntent.FLAG_CANCEL_CURRENT);
-
-        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-        if (alarmManager != null) {
-            // 해당 PendingIntent가 존재하면 취소
-            alarmManager.cancel(pendingIntent);
-            pendingIntent.cancel();
         }
     }
 }
