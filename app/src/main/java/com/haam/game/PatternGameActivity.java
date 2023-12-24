@@ -69,6 +69,7 @@ public class PatternGameActivity extends AppCompatActivity {
                         patternLockView.setCorrectStateColor(Color.parseColor("#FF0000"));
                         PopRingActivity.INCORRECT_ANSWER_NUM= PopRingActivity.INCORRECT_ANSWER_NUM+1;
                         //빨강
+                        finish();
                     }
                 }
             }

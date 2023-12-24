@@ -65,6 +65,7 @@ public class TraceGameActivity extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), "오답입니다.", Toast.LENGTH_SHORT).show();
             generateRandomString();
             userInput.setText("");
+            finish();
         }
     }
 }

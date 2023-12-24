@@ -62,6 +62,7 @@ public class MultiplyGameActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), "오답입니다.", Toast.LENGTH_SHORT).show();
                 generateQuestion();
                 answer.setText("");
+                finish();
             }
         }
     }
